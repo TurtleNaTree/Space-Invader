@@ -6,8 +6,12 @@ public class Invaders : MonoBehaviour
   public int rows = 5;
   public int columns = 11;
 
-  public float speed = 1f;
+  public AnimationCurve speed;
+  public float missileAttachRate;
+  public int ammountKilled { get; private set; }
+  public float totalInvaders => (float)this.rows * this.columns; // => computed or calculated property google later
 
+  public float percentKilled => this.ammountKilled / this.totalInvaders;
   private Vector3 _direction = Vector2.right;
 
   private void Awake()
@@ -22,6 +26,7 @@ public class Invaders : MonoBehaviour
           for (int column = 0; column < this.columns; column++)
           {
               Invader invader = Instantiate(this.prefabs[row], this.transform);
+              invader.killed += InvaderKilled;
               invader.name = "invader " + row + " " + column; 
               Vector3 position = rowPosition;
               position.x += column * 2.0f;
@@ -30,9 +35,13 @@ public class Invaders : MonoBehaviour
       }
   }
 
+  private void Start()
+  {
+      InvokeRepeating(nameof(missileAttack), this.missileAttachRate, this.missileAttachRate);
+  }
   private void Update()
   {
-      this.transform.position += _direction * this.speed * Time.deltaTime;
+      this.transform.position += _direction * this.speed.Evaluate(this.percentKilled) * Time.deltaTime;
 
       Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
       Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
@@ -64,4 +73,13 @@ public class Invaders : MonoBehaviour
           position.y -= 1.0f;
           this.transform.position = position;
       }
+
+    private void missileAttack()
+    {
+        
+    }
+    private void InvaderKilled()
+    {
+        this.ammountKilled++;
+    }
 }

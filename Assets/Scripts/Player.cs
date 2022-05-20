@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
     public Projectile laserPrefab;
     public float speed = 5.0f;
-
+    private bool _laserActive;
     private void Update()
     {
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
@@ -24,8 +24,19 @@ public class Player : MonoBehaviour
 
     private void Shoot()
     {
-         Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity); // Quaternion.identity is for rotations. it doesnt matter in this case so its 0 (identity)
+        if (!_laserActive){
+            Projectile projectile = Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity); // Quaternion.identity is for rotations. it doesnt matter in this case so its 0 (identity)
+            projectile.destroyed += LaserDestroyed;
+            _laserActive = true;
+        }
+         
          
     }
+
+    private void LaserDestroyed()
+    {
+        _laserActive = false;
+    }
+
 
 }
