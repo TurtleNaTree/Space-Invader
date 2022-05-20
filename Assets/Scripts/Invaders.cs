@@ -22,6 +22,7 @@ public class Invaders : MonoBehaviour
           for (int column = 0; column < this.columns; column++)
           {
               Invader invader = Instantiate(this.prefabs[row], this.transform);
+              invader.name = "invader " + row + " " + column; 
               Vector3 position = rowPosition;
               position.x += column * 2.0f;
               invader.transform.localPosition = position;
@@ -39,6 +40,7 @@ public class Invaders : MonoBehaviour
 
       foreach (Transform invader in this.transform)
       {
+          print(invader.name);
           if (!invader.gameObject.activeInHierarchy) {
               continue;
           }
