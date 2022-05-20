@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement; // need to reset the scene when the player touches a invader, missile or if all invaders die
 public class Invaders : MonoBehaviour
 {
   public Invader[] prefabs;
@@ -91,5 +91,12 @@ public class Invaders : MonoBehaviour
     private void InvaderKilled()
     {
         this.ammountKilled++;
+
+        if (this.ammountKilled >= this.totalInvaders){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
+
+    
+
 }
